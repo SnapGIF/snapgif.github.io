@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://snapgif.github.io/sitemap.xml
+Sitemap: https://snapgif.github.io/sitemap-index.xml

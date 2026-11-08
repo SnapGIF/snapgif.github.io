@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import VideoToGifConverter from '../../components/VideoToGifConverter.astro';
+import BelowFoldSections from '../../components/BelowFoldSections.astro';
+import { locales, defaultLocale, type Locale } from '../../i18n/ui';
+
+export function getStaticPaths() {
+  return locales
+    .filter((loc) => loc !== defaultLocale)
+    .map((loc) => ({
+      params: { lang: loc },
+      props: { lang: loc }
+    }));
+}
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+---
+
+<BaseLayout lang={lang} currentPath="">
+  <VideoToGifConverter lang={lang} />
+  <BelowFoldSections lang={lang} />
+</BaseLayout>

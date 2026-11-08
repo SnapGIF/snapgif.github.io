@@ -1,0 +1,32 @@
+{
+  "name": "SnapGIF — Free Video to GIF Maker",
+  "short_name": "SnapGIF",
+  "description": "Convert MP4, WebM, and MOV videos to high-quality animated GIFs 100% locally in your browser with zero uploads.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#FFFDF7",
+  "theme_color": "#31AAA9",
+  "orientation": "any",
+  "categories": ["photo", "video", "utilities", "productivity"],
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

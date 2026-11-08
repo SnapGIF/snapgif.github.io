@@ -1,0 +1,139 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Palette Tokens */
+  --vibrant-retro-teal: #31AAA9;
+  --warm-vanilla-cream: #F8E0A4;
+  --vivid-crimson-red: #A82020;
+  --deep-burgundy-mahogany: #6C1A1A;
+  --pure-canvas-white: #FFFFFF;
+  --soft-cream-tint: #FFFDF7;
+
+  /* Light Mode Default */
+  --bg-primary: #FFFDF7;
+  --bg-surface-card: #F8E0A4;
+  --workspace-box-bg: #FFFFFF;
+  --primary-action-button: #A82020;
+  --primary-action-hover: #6C1A1A;
+  --primary-action-text: #FFFFFF;
+  --secondary-accent-surface: #31AAA9;
+  --highlight-pill-badge: #F8E0A4;
+  --border-color: #31AAA9;
+  --text-primary: #6C1A1A;
+  --text-secondary: #A82020;
+}
+
+html.dark {
+  /* Dark Mode Tokens */
+  --bg-primary: #1E0B0B;
+  --bg-surface-card: #6C1A1A;
+  --workspace-box-bg: #2B1010;
+  --primary-action-button: #31AAA9;
+  --primary-action-hover: #F8E0A4;
+  --primary-action-text: #1E0B0B;
+  --secondary-accent-surface: #A82020;
+  --highlight-pill-badge: #6C1A1A;
+  --border-color: #31AAA9;
+  --text-primary: #F8E0A4;
+  --text-secondary: #31AAA9;
+}
+
+@layer base {
+  html {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    scroll-behavior: smooth;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 1.15rem;
+    line-height: 1.6;
+    transition: background-color 0.25s ease, color 0.25s ease;
+    overflow-x: hidden;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 4vw, 3.25rem);
+    line-height: 1.12;
+    letter-spacing: -0.025em;
+    font-weight: 800;
+  }
+}
+
+/* Custom Range Input Styling for Trim Controls */
+input[type='range'].snap-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 10px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #31AAA9 0%, #A82020 100%);
+  outline: none;
+  cursor: pointer;
+}
+
+input[type='range'].snap-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #F8E0A4;
+  border: 3px solid #A82020;
+  box-shadow: 0 2px 8px rgba(108, 26, 26, 0.35);
+  cursor: grab;
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+input[type='range'].snap-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  background: #FFFFFF;
+}
+
+input[type='range'].snap-slider::-moz-range-thumb {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #F8E0A4;
+  border: 3px solid #A82020;
+  box-shadow: 0 2px 8px rgba(108, 26, 26, 0.35);
+  cursor: grab;
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+/* Dropzone floating animation & active states */
+.dropzone-container {
+  border: 3px dashed #31AAA9;
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dropzone-container:hover,
+.dropzone-container.drag-over {
+  border-color: #A82020;
+  transform: translateY(-3px);
+  box-shadow: 0 16px 36px -8px rgba(168, 32, 32, 0.18);
+}
+
+/* Progress bar animated shimmer */
+@keyframes progressShimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.progress-gradient-bar {
+  background: linear-gradient(90deg, #31AAA9, #A82020, #31AAA9);
+  background-size: 200% 200%;
+  animation: progressShimmer 2.2s ease infinite;
+}

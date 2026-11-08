@@ -1,0 +1,156 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import SchemaOrg from '../components/SchemaOrg.astro';
+import {
+  locales,
+  languages,
+  getLocalizedPath,
+  useTranslations,
+  TARGET_META_KEYWORDS,
+  type Locale
+} from '../i18n/ui';
+
+interface Props {
+  lang: Locale;
+  title?: string;
+  description?: string;
+  currentPath?: string;
+}
+
+const { lang, title, description, currentPath = '' } = Astro.props;
+const t = useTranslations(lang);
+
+const pageTitle = title || t.metaTitle;
+const pageDescription = description || t.metaDescription;
+const siteOrigin = 'https://snapgif.github.io';
+const canonicalUrl = `${siteOrigin}${getLocalizedPath(lang, currentPath)}`;
+const ogImageUrl = `${siteOrigin}/og-image.svg`;
+const currentOgLocale = languages[lang].ogLocale;
+const alternateOgLocales = locales
+  .filter((loc) => loc !== lang)
+  .map((loc) => languages[loc].ogLocale);
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <!-- Google Tag Manager & Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtm.js?id=GTM-N2J2N8VM"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-908P8JY2SH"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', 'G-908P8JY2SH');
+    </script>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+    <meta name="keywords" content={TARGET_META_KEYWORDS} />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+
+    <!-- Self-Referencing Canonical & Sitemap Discovery -->
+    <link rel="canonical" href={canonicalUrl} />
+    <link
+      rel="sitemap"
+      type="application/xml"
+      title="Sitemap"
+      href="https://snapgif.github.io/sitemap.xml"
+    />
+
+    <!-- Favicon & PWA Manifest -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#31AAA9" />
+
+    <!-- 8-Language Hreflang Alternates + x-default -->
+    {
+      locales.map((loc) => (
+        <link
+          rel="alternate"
+          hreflang={loc}
+          href={`${siteOrigin}${getLocalizedPath(loc, currentPath)}`}
+        />
+      ))
+    }
+    <link
+      rel="alternate"
+      hreflang="x-default"
+      href={`${siteOrigin}${getLocalizedPath('en', currentPath)}`}
+    />
+
+    <!-- Open Graph Metadata (with 8-language locale alternates) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:site_name" content="SnapGIF" />
+    <meta property="og:locale" content={currentOgLocale} />
+    {
+      alternateOgLocales.map((altLocale) => (
+        <meta property="og:locale:alternate" content={altLocale} />
+      ))
+    }
+
+    <!-- Twitter Card Metadata -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDescription} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    <!-- Non-Render-Blocking Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Space+Grotesk:wght@700;800&display=swap"
+      rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Space+Grotesk:wght@700;800&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
+
+    <!-- Early Theme Initialization (Light Mode Default) -->
+    <script is:inline>
+      (function () {
+        try {
+          const saved = localStorage.getItem('snapgif-theme');
+          if (saved === 'dark') {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
+
+    <!-- Strict Zero-Fake-Rating JSON-LD Structured Data -->
+    <SchemaOrg lang={lang} canonicalUrl={canonicalUrl} />
+  </head>
+  <body class="min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] antialiased">
+    <Header lang={lang} currentPath={currentPath} />
+    <main>
+      <slot />
+    </main>
+
+    <!-- Offline-First PWA Service Worker Registration -->
+    <script is:inline>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').catch(() => {});
+        });
+      }
+    </script>
+  </body>
+</html>

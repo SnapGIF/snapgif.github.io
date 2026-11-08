@@ -1,0 +1,121 @@
+---
+import { useTranslations, getLocalizedPath, type Locale } from '../i18n/ui';
+
+interface Props {
+  lang: Locale;
+  canonicalUrl: string;
+}
+
+const { lang, canonicalUrl } = Astro.props;
+const t = useTranslations(lang);
+const siteOrigin = 'https://snapgif.github.io';
+const homeUrl = `${siteOrigin}${getLocalizedPath(lang, '')}`;
+
+// Strict compliance: ZERO fake AggregateRating or fabricated review schemas
+const schemaGraph = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: 'SnapGIF',
+      url: canonicalUrl,
+      applicationCategory: 'MultimediaApplication',
+      operatingSystem: 'All',
+      description: t.metaDescription,
+      inLanguage: lang,
+      offers: {
+        '@type': 'Offer',
+        price: '0.00',
+        priceCurrency: 'USD'
+      }
+    },
+    {
+      '@type': 'HowTo',
+      name: t.howToTitle,
+      description: t.howToSubtitle,
+      step: [
+        {
+          '@type': 'HowToStep',
+          position: 1,
+          name: t.howToStep1Title,
+          text: t.howToStep1Text
+        },
+        {
+          '@type': 'HowToStep',
+          position: 2,
+          name: t.howToStep2Title,
+          text: t.howToStep2Text
+        },
+        {
+          '@type': 'HowToStep',
+          position: 3,
+          name: t.howToStep3Title,
+          text: t.howToStep3Text
+        }
+      ]
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: t.faq1Q,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: t.faq1A
+          }
+        },
+        {
+          '@type': 'Question',
+          name: t.faq2Q,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: t.faq2A
+          }
+        },
+        {
+          '@type': 'Question',
+          name: t.faq3Q,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: t.faq3A
+          }
+        },
+        {
+          '@type': 'Question',
+          name: t.faq4Q,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: t.faq4A
+          }
+        }
+      ]
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: t.breadcrumbHome,
+          item: homeUrl
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: t.breadcrumbCategory,
+          item: `${homeUrl}#converter-hero`
+        },
+        {
+          '@type': 'ListItem',
+          position: 3,
+          name: t.breadcrumbTool,
+          item: canonicalUrl
+        }
+      ]
+    }
+  ]
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schemaGraph)} />

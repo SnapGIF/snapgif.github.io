@@ -1,0 +1,37 @@
+# Build output
+dist/
+.output/
+public/ffmpeg/
+
+# Generated Astro types & cache
+.astro/
+
+# Dependencies
+node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment variables
+.env
+.env.production
+.env.local
+.env.*.local
+
+# macOS / Windows / Linux OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

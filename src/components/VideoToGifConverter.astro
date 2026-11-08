@@ -1,0 +1,1213 @@
+---
+import { useTranslations, type Locale } from '../i18n/ui';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<section
+  id="converter-hero"
+  class="relative flex min-h-[calc(100dvh-4rem)] w-full flex-col items-center justify-center px-3 py-5 sm:px-6 lg:px-8"
+>
+  <!-- Decorative subtle background glow -->
+  <div
+    class="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
+    aria-hidden="true"
+  >
+    <div
+      class="absolute -top-24 left-1/2 h-80 w-[44rem] -translate-x-1/2 rounded-full bg-[#F8E0A4]/35 blur-3xl dark:bg-[#A82020]/15"
+    ></div>
+  </div>
+
+  <!-- Primary H1 + Subtitle -->
+  <div class="mx-auto mb-5 max-w-4xl text-center">
+    <h1 class="font-display font-extrabold tracking-tight text-[var(--text-primary)]">
+      {t.heroH1}
+    </h1>
+    <p class="mt-2 text-base font-bold text-[var(--text-secondary)] sm:text-lg">
+      {t.heroSubtitle}
+    </p>
+  </div>
+
+  <!-- Main Interactive Converter Box Div -->
+  <div
+    id="converter-workspace-box"
+    data-i18n-pass1={t.progressPass1}
+    data-i18n-pass2={t.progressPass2}
+    data-i18n-mp4={t.progressMp4}
+    data-i18n-copied={t.btnCopiedSuccess}
+    data-i18n-copy={t.btnCopyClipboard}
+    data-i18n-dl-gif={t.btnDownloadGif}
+    data-i18n-dl-mp4={t.btnDownloadMp4}
+    data-i18n-convert-gif={t.btnConvertNow}
+    data-i18n-convert-mp4={t.btnConvertMp4Now}
+    class="w-full max-w-5xl rounded-3xl border-[3px] border-[#31AAA9] bg-[var(--workspace-box-bg)] p-4 shadow-retro-card transition-all duration-300 sm:p-7"
+  >
+    <!-- Ultra-Simple Collapsible Mode Presets Bar (Collapsed by default on initial load) -->
+    <div class="mb-3 flex flex-col items-center">
+      <button
+        type="button"
+        id="mode-collapse-toggle"
+        aria-expanded="false"
+        aria-controls="mode-pills-drawer"
+        class="inline-flex items-center gap-2 rounded-full border-2 border-[#31AAA9] bg-[var(--bg-primary)] px-4 py-1.5 text-xs font-extrabold text-[var(--text-primary)] shadow-sm transition-all hover:border-[#A82020] hover:bg-[#F8E0A4]/40 sm:text-sm"
+      >
+        <span id="active-mode-label">🎬 {t.modeVideoToGif}</span>
+        <svg
+          id="mode-collapse-arrow"
+          class="h-4 w-4 text-[#A82020] transition-transform duration-200 dark:text-[#F8E0A4]"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <polyline points="6 9 12 15 18 9" />
+        </svg>
+      </button>
+
+      <!-- Collapsible Mode Selector Pills Drawer (Hidden on initial load) -->
+      <div
+        id="mode-pills-drawer"
+        role="tablist"
+        aria-label="Conversion Mode Selector"
+        class="mt-3 hidden w-full flex-wrap items-center justify-center gap-2 rounded-2xl border-2 border-[#31AAA9]/40 bg-[var(--bg-primary)] p-3"
+      >
+        <button
+          type="button"
+          role="tab"
+          aria-selected="true"
+          data-mode="video-to-gif"
+          class="mode-pill active rounded-2xl border-2 border-[#A82020] bg-[#A82020] px-4 py-2 text-sm font-extrabold text-[#FFFFFF] shadow-sm transition-all hover:scale-[1.02] sm:text-base"
+        >
+          🎬 {t.modeVideoToGif}
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected="false"
+          data-mode="mp4-to-gif"
+          class="mode-pill rounded-2xl border-2 border-[#31AAA9] bg-[var(--highlight-pill-badge)]/60 px-4 py-2 text-sm font-bold text-[var(--text-primary)] transition-all hover:border-[#A82020] hover:bg-[#F8E0A4] dark:hover:text-[#1E0B0B] sm:text-base"
+        >
+          🎞️ {t.modeMp4ToGif}
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected="false"
+          data-mode="webm-to-gif"
+          class="mode-pill rounded-2xl border-2 border-[#31AAA9] bg-[var(--highlight-pill-badge)]/60 px-4 py-2 text-sm font-bold text-[var(--text-primary)] transition-all hover:border-[#A82020] hover:bg-[#F8E0A4] dark:hover:text-[#1E0B0B] sm:text-base"
+        >
+          🌐 {t.modeWebmToGif}
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected="false"
+          data-mode="gif-to-mp4"
+          class="mode-pill rounded-2xl border-2 border-[#31AAA9] bg-[var(--highlight-pill-badge)]/60 px-4 py-2 text-sm font-bold text-[var(--text-primary)] transition-all hover:border-[#A82020] hover:bg-[#F8E0A4] dark:hover:text-[#1E0B0B] sm:text-base"
+        >
+          ⚡ {t.modeGifToMp4}
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected="false"
+          data-mode="compress-gif"
+          class="mode-pill rounded-2xl border-2 border-[#31AAA9] bg-[var(--highlight-pill-badge)]/60 px-4 py-2 text-sm font-bold text-[var(--text-primary)] transition-all hover:border-[#A82020] hover:bg-[#F8E0A4] dark:hover:text-[#1E0B0B] sm:text-base"
+        >
+          🗜️ {t.modeCompressGif}
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected="false"
+          data-mode="discord-sticker"
+          class="mode-pill rounded-2xl border-2 border-[#31AAA9] bg-[var(--highlight-pill-badge)]/60 px-4 py-2 text-sm font-bold text-[var(--text-primary)] transition-all hover:border-[#A82020] hover:bg-[#F8E0A4] dark:hover:text-[#1E0B0B] sm:text-base"
+        >
+          💬 {t.modeDiscordSticker}
+        </button>
+      </div>
+    </div>
+
+    <!-- STEP 1: GIANT DASHED DROPZONE -->
+    <div
+      id="step-1-dropzone"
+      class="dropzone-container relative flex flex-col items-center justify-center rounded-3xl bg-[#FFFDF7] px-5 py-8 text-center dark:bg-[#1E0B0B]/80 sm:py-11"
+    >
+      <!-- Hidden File Input (supports batch files + video/gif) -->
+      <input
+        type="file"
+        id="video-file-input"
+        accept="video/mp4,video/webm,video/quicktime,video/x-matroska,video/*,image/gif,.mp4,.webm,.mov,.mkv,.gif"
+        multiple
+        class="sr-only"
+        aria-label={t.btnSelectVideo}
+      />
+
+      <!-- Warm Vanilla Cream Accent Badge -->
+      <span
+        class="mb-4 inline-flex items-center gap-2 rounded-full border-2 border-[#31AAA9] bg-[#F8E0A4] px-4 py-1.5 text-xs font-extrabold uppercase tracking-wider text-[#6C1A1A] shadow-sm sm:text-sm"
+      >
+        <span class="h-2.5 w-2.5 rounded-full bg-[#A82020] animate-ping"></span>
+        {t.dropzoneBadge}
+      </span>
+
+      <!-- Oversized 64px Animated Floating SVG Icon -->
+      <div
+        class="mb-4 flex h-20 w-20 animate-float-slow items-center justify-center rounded-2xl border-2 border-[#31AAA9] bg-[#F8E0A4]/80 text-[#A82020] shadow-md dark:bg-[#6C1A1A] dark:text-[#F8E0A4]"
+      >
+        <svg
+          class="h-14 w-14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <rect x="2" y="3" width="20" height="14" rx="2.5" />
+          <polygon points="10,7 10,13 15,10" fill="currentColor" />
+          <path d="M8 21h8" />
+          <path d="M12 17v4" />
+        </svg>
+      </div>
+
+      <h2 class="font-display text-2xl font-extrabold text-[var(--text-primary)] sm:text-3xl">
+        {t.dropzoneTitle}
+      </h2>
+      <p class="mt-1.5 max-w-xl text-base font-medium text-[var(--text-secondary)] sm:text-lg">
+        {t.dropzoneSubtitle}
+      </p>
+
+      <!-- Single Primary Action Button -->
+      <div class="mt-6 flex items-center justify-center">
+        <button
+          type="button"
+          id="select-video-btn"
+          class="inline-flex items-center gap-3 rounded-2xl border-2 border-[#6C1A1A] bg-[#A82020] px-8 py-4 text-lg font-extrabold text-[#FFFFFF] shadow-retro-btn transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#6C1A1A] focus:outline-none focus:ring-4 focus:ring-[#31AAA9] sm:px-10 sm:text-xl"
+        >
+          <svg
+            class="h-7 w-7 shrink-0 text-[#F8E0A4]"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.4"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="17 8 12 3 7 8" />
+            <line x1="12" y1="3" x2="12" y2="15" />
+          </svg>
+          <span>{t.btnSelectVideo}</span>
+        </button>
+      </div>
+
+      <p class="mt-4 text-xs font-bold uppercase tracking-wider text-[#31AAA9]">
+        ✨ {t.batchSupportLabel}
+      </p>
+    </div>
+
+    <!-- STEP 2: ULTRA-MINIMAL CONVERT VIEW + COLLAPSIBLE SETTINGS DRAWER -->
+    <div id="step-2-controls" class="hidden space-y-5 pt-1">
+      <!-- Compact File Info + Load Another Video Bar -->
+      <div
+        class="mx-auto flex w-full max-w-2xl flex-col gap-2.5 overflow-hidden rounded-2xl border-2 border-[#31AAA9] bg-[#F8E0A4]/35 p-3 dark:bg-[#6C1A1A]/40 sm:flex-row sm:items-center sm:justify-between sm:px-4 sm:py-2.5"
+      >
+        <div class="flex min-w-0 flex-1 items-center gap-2.5">
+          <span
+            class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#A82020] text-sm font-extrabold text-[#FFFFFF]"
+            aria-hidden="true"
+          >
+            🎞️
+          </span>
+          <p
+            id="loaded-file-meta"
+            class="min-w-0 flex-1 break-all font-mono text-xs font-bold leading-snug text-[var(--text-primary)] sm:text-sm"
+          >
+            video.mp4 • 1280×720
+          </p>
+        </div>
+        <button
+          type="button"
+          id="change-file-btn"
+          class="w-full shrink-0 rounded-xl border-2 border-[#31AAA9] bg-[var(--workspace-box-bg)] px-3.5 py-2 text-center text-xs font-extrabold text-[var(--text-primary)] transition-colors hover:border-[#A82020] hover:bg-[#F8E0A4] dark:hover:text-[#1E0B0B] sm:w-auto sm:py-1.5 sm:text-sm"
+        >
+          🔄 {t.btnChangeFile}
+        </button>
+      </div>
+
+      <!-- Batch Queue Bar (shown only when multiple files dropped) -->
+      <div
+        id="batch-queue-container"
+        class="mx-auto hidden max-w-2xl rounded-2xl border-2 border-[#31AAA9] bg-[var(--bg-primary)] p-3"
+      >
+        <p class="mb-2 text-xs font-extrabold uppercase tracking-wider text-[#31AAA9]">
+          {t.batchQueueTitle}
+        </p>
+        <div id="batch-queue-list" class="flex flex-wrap gap-2"></div>
+      </div>
+
+      <!-- Minimal Centered Video Preview + Primary Convert Button -->
+      <div class="mx-auto flex max-w-2xl flex-col items-center space-y-4">
+        <div
+          class="relative aspect-video max-h-[280px] w-full overflow-hidden rounded-2xl border-2 border-[#31AAA9] bg-black shadow-md"
+        >
+          <video
+            id="preview-video-player"
+            class="h-full w-full object-contain"
+            controls
+            muted
+            loop
+            playsinline
+          ></video>
+        </div>
+
+        <!-- Primary Convert Action Button (Immediately Visible) -->
+        <button
+          type="button"
+          id="start-convert-btn"
+          class="flex w-full items-center justify-center gap-3 rounded-2xl border-2 border-[#6C1A1A] bg-[#A82020] px-8 py-4 text-xl font-extrabold text-[#FFFFFF] shadow-retro-btn transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#6C1A1A] focus:outline-none focus:ring-4 focus:ring-[#31AAA9]"
+        >
+          <svg
+            class="h-7 w-7 shrink-0 text-[#F8E0A4]"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.4"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+          </svg>
+          <span id="start-convert-btn-text">{t.btnConvertNow}</span>
+        </button>
+
+        <!-- Collapsible More Settings Toggle Button (with Arrow Icon) -->
+        <button
+          type="button"
+          id="advanced-settings-toggle"
+          aria-expanded="false"
+          aria-controls="advanced-settings-drawer"
+          class="inline-flex items-center gap-2 rounded-full border-2 border-[#31AAA9] bg-[var(--bg-primary)] px-5 py-2 text-xs font-extrabold text-[var(--text-primary)] shadow-sm transition-all hover:border-[#A82020] hover:bg-[#F8E0A4]/40 sm:text-sm"
+        >
+          <span>⚙️ {t.controlsHeader}</span>
+          <svg
+            id="advanced-settings-arrow"
+            class="h-4 w-4 text-[#A82020] transition-transform duration-200 dark:text-[#F8E0A4]"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Collapsible Settings & Trim Drawer (Hidden by Default) -->
+      <div
+        id="advanced-settings-drawer"
+        class="mx-auto hidden max-w-4xl space-y-6 rounded-3xl border-2 border-[#31AAA9] bg-[var(--bg-primary)] p-5 shadow-inner sm:p-6"
+      >
+        <!-- 1. Start Time & End Time Trim Sliders -->
+        <div class="rounded-2xl border-2 border-[#31AAA9]/50 bg-[var(--workspace-box-bg)] p-4">
+          <div class="mb-3 flex flex-wrap items-center justify-between gap-2">
+            <span class="text-sm font-extrabold uppercase tracking-wider text-[#31AAA9]">
+              ✂️ {t.trimTitle}
+            </span>
+            <span
+              id="trim-duration-badge"
+              class="rounded-lg bg-[#A82020] px-2.5 py-0.5 font-mono text-xs font-extrabold text-[#FFFFFF]"
+            >
+              {t.trimDuration}: 3.0s
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div>
+              <div class="mb-1 flex justify-between text-sm font-extrabold">
+                <label for="trim-start-slider">{t.trimStart}</label>
+                <span id="trim-start-val" class="font-mono text-[#A82020] dark:text-[#F8E0A4]">
+                  0.0s
+                </span>
+              </div>
+              <input
+                type="range"
+                id="trim-start-slider"
+                class="snap-slider"
+                min="0"
+                max="15"
+                step="0.1"
+                value="0"
+              />
+            </div>
+
+            <div>
+              <div class="mb-1 flex justify-between text-sm font-extrabold">
+                <label for="trim-end-slider">{t.trimEnd}</label>
+                <span id="trim-end-val" class="font-mono text-[#31AAA9]">3.0s</span>
+              </div>
+              <input
+                type="range"
+                id="trim-end-slider"
+                class="snap-slider"
+                min="0.2"
+                max="15"
+                step="0.1"
+                value="3.0"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Quality & Preset Cards -->
+        <div>
+          <label class="mb-2 block text-sm font-extrabold uppercase tracking-wider text-[#31AAA9]">
+            {t.presetSectionTitle}
+          </label>
+          <div class="grid grid-cols-1 gap-2.5 sm:grid-cols-3">
+            <button
+              type="button"
+              data-preset="hd"
+              class="preset-card active flex flex-col justify-between rounded-2xl border-2 border-[#A82020] bg-[#F8E0A4] p-3 text-left text-[#6C1A1A] shadow-sm transition-all"
+            >
+              <span class="text-sm font-extrabold">✨ {t.presetHdTitle}</span>
+              <span class="mt-1 text-xs font-semibold opacity-90">{t.presetHdDesc}</span>
+            </button>
+
+            <button
+              type="button"
+              data-preset="balanced"
+              class="preset-card flex flex-col justify-between rounded-2xl border-2 border-[#31AAA9] bg-[var(--workspace-box-bg)] p-3 text-left text-[var(--text-primary)] transition-all hover:border-[#A82020]"
+            >
+              <span class="text-sm font-extrabold">⚡ {t.presetBalancedTitle}</span>
+              <span class="mt-1 text-xs font-semibold opacity-80">{t.presetBalancedDesc}</span>
+            </button>
+
+            <button
+              type="button"
+              data-preset="discord"
+              class="preset-card flex flex-col justify-between rounded-2xl border-2 border-[#31AAA9] bg-[var(--workspace-box-bg)] p-3 text-left text-[var(--text-primary)] transition-all hover:border-[#A82020]"
+            >
+              <span class="text-sm font-extrabold">💬 {t.presetDiscordTitle}</span>
+              <span class="mt-1 text-xs font-semibold opacity-80">{t.presetDiscordDesc}</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 3. Frame Rate (FPS) & Width / Resolution -->
+        <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+          <!-- Frame Rate (FPS) Quick Pills -->
+          <div>
+            <div class="mb-1.5 flex flex-wrap items-center justify-between gap-1">
+              <span class="text-sm font-extrabold text-[var(--text-primary)]">{t.fpsLabel}</span>
+            </div>
+            <div class="flex flex-wrap gap-2" role="group" aria-label={t.fpsLabel}>
+              {
+                [10, 15, 20, 24, 25, 30].map((fpsVal) => (
+                  <button
+                    type="button"
+                    data-fps={fpsVal}
+                    class:list={[
+                      'fps-pill rounded-xl border-2 px-3 py-1.5 text-sm font-extrabold transition-all',
+                      fpsVal === 15
+                        ? 'border-[#A82020] bg-[#A82020] text-[#FFFFFF]'
+                        : 'border-[#31AAA9] bg-[var(--workspace-box-bg)] text-[var(--text-primary)] hover:border-[#A82020]'
+                    ]}
+                  >
+                    {fpsVal} FPS
+                  </button>
+                ))
+              }
+            </div>
+          </div>
+
+          <!-- Width / Resolution Quick Pills -->
+          <div>
+            <div class="mb-1.5 flex flex-wrap items-center justify-between gap-1">
+              <span class="text-sm font-extrabold text-[var(--text-primary)]">{t.widthLabel}</span>
+            </div>
+            <div class="flex flex-wrap gap-2" role="group" aria-label={t.widthLabel}>
+              {
+                [
+                  { label: '320px', val: 320 },
+                  { label: '480px', val: 480 },
+                  { label: '640px', val: 640 },
+                  { label: '800px', val: 800 },
+                  { label: t.widthOriginal, val: 0 }
+                ].map((item) => (
+                  <button
+                    type="button"
+                    data-width={item.val}
+                    class:list={[
+                      'width-pill rounded-xl border-2 px-3 py-1.5 text-sm font-extrabold transition-all',
+                      item.val === 480
+                        ? 'border-[#A82020] bg-[#A82020] text-[#FFFFFF]'
+                        : 'border-[#31AAA9] bg-[var(--workspace-box-bg)] text-[var(--text-primary)] hover:border-[#A82020]'
+                    ]}
+                  >
+                    {item.label}
+                  </button>
+                ))
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Speed & Loop Controls Row -->
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <!-- Speed Multiplier -->
+          <div>
+            <span class="mb-1.5 block text-sm font-extrabold text-[var(--text-primary)]">
+              {t.speedLabel}
+            </span>
+            <div class="flex flex-wrap gap-1.5" role="group" aria-label={t.speedLabel}>
+              {
+                [0.5, 1, 1.5, 2].map((spd) => (
+                  <button
+                    type="button"
+                    data-speed={spd}
+                    class:list={[
+                      'speed-pill rounded-xl border-2 px-3 py-1.5 text-sm font-extrabold transition-all',
+                      spd === 1
+                        ? 'border-[#A82020] bg-[#A82020] text-[#FFFFFF]'
+                        : 'border-[#31AAA9] bg-[var(--workspace-box-bg)] text-[var(--text-primary)] hover:border-[#A82020]'
+                    ]}
+                  >
+                    {spd}x
+                  </button>
+                ))
+              }
+            </div>
+          </div>
+
+          <!-- Loop & Direction -->
+          <div>
+            <span class="mb-1.5 block text-sm font-extrabold text-[var(--text-primary)]">
+              {t.loopLabel}
+            </span>
+            <div class="flex flex-wrap gap-1.5" role="group" aria-label={t.loopLabel}>
+              <button
+                type="button"
+                data-loop="infinite"
+                class="loop-pill rounded-xl border-2 border-[#A82020] bg-[#A82020] px-3 py-1.5 text-xs font-extrabold text-[#FFFFFF] transition-all sm:text-sm"
+              >
+                ♾️ {t.loopInfinite}
+              </button>
+              <button
+                type="button"
+                data-loop="boomerang"
+                class="loop-pill rounded-xl border-2 border-[#31AAA9] bg-[var(--workspace-box-bg)] px-3 py-1.5 text-xs font-extrabold text-[var(--text-primary)] transition-all hover:border-[#A82020] sm:text-sm"
+              >
+                🪃 {t.loopBoomerang}
+              </button>
+              <button
+                type="button"
+                data-loop="reverse"
+                class="loop-pill rounded-xl border-2 border-[#31AAA9] bg-[var(--workspace-box-bg)] px-3 py-1.5 text-xs font-extrabold text-[var(--text-primary)] transition-all hover:border-[#A82020] sm:text-sm"
+              >
+                ⏪ {t.loopReverse}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3: ANIMATED 2-PASS PROGRESS BAR -->
+    <div
+      id="step-3-progress"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+      class="hidden flex-col items-center justify-center rounded-3xl border-2 border-[#31AAA9] bg-[#FFFDF7] px-6 py-12 text-center dark:bg-[#1E0B0B]"
+    >
+      <div
+        class="mb-4 flex h-16 w-16 animate-spin items-center justify-center rounded-2xl border-4 border-[#31AAA9] border-t-[#A82020]"
+        aria-hidden="true"
+      ></div>
+
+      <h3 class="font-display text-2xl font-extrabold text-[var(--text-primary)]">
+        {t.progressTitle}
+      </h3>
+      <p
+        id="progress-status-text"
+        aria-live="polite"
+        class="mt-2 text-lg font-extrabold text-[#A82020] dark:text-[#F8E0A4]"
+      >
+        {t.progressPass1}
+      </p>
+
+      <!-- Smooth Gradient Progress Bar (#31AAA9 to #A82020) -->
+      <div
+        role="progressbar"
+        aria-label={t.progressTitle}
+        aria-valuemin="0"
+        aria-valuemax="100"
+        aria-live="polite"
+        class="mt-6 h-6 w-full max-w-xl overflow-hidden rounded-full border-2 border-[#6C1A1A] bg-[#F8E0A4]/40 p-0.5 shadow-inner"
+      >
+        <div
+          id="progress-bar-fill"
+          class="progress-gradient-bar h-full rounded-full transition-all duration-200"
+          style="width: 10%"
+        ></div>
+      </div>
+
+      <p
+        id="progress-percentage-text"
+        aria-live="polite"
+        class="mt-2 font-mono text-2xl font-extrabold text-[var(--text-primary)]"
+      >
+        10%
+      </p>
+
+      <div
+        class="mt-5 inline-flex items-center gap-2 rounded-full border-2 border-[#31AAA9] bg-[#F8E0A4] px-4 py-1.5 text-xs font-extrabold text-[#6C1A1A] sm:text-sm"
+      >
+        🔒 {t.progressPrivacyBadge}
+      </div>
+    </div>
+
+    <!-- STEP 4: INSTANT ANIMATED PREVIEW & 1-CLICK DOWNLOAD -->
+    <div id="step-4-result" aria-live="polite" class="hidden space-y-6 pt-2">
+      <div
+        role="alert"
+        aria-live="polite"
+        class="flex flex-wrap items-center justify-between gap-3 rounded-2xl border-2 border-[#31AAA9] bg-[#F8E0A4]/50 px-5 py-3.5 dark:bg-[#6C1A1A]"
+      >
+        <div class="flex items-center gap-2.5">
+          <span class="text-2xl" aria-hidden="true">🎉</span>
+          <h3 class="font-display text-xl font-extrabold text-[var(--text-primary)] sm:text-2xl">
+            {t.resultHeader}
+          </h3>
+        </div>
+
+        <!-- Output Metadata Badges (Dimensions, Frames, File Size) -->
+        <div class="flex flex-wrap items-center gap-2">
+          <span
+            id="result-dimensions-badge"
+            aria-live="polite"
+            class="rounded-xl border-2 border-[#31AAA9] bg-[var(--workspace-box-bg)] px-3 py-1 font-mono text-xs font-extrabold text-[var(--text-primary)] sm:text-sm"
+          >
+            {t.resultDimensions}: 480×270
+          </span>
+          <span
+            id="result-frames-badge"
+            aria-live="polite"
+            class="rounded-xl border-2 border-[#31AAA9] bg-[var(--workspace-box-bg)] px-3 py-1 font-mono text-xs font-extrabold text-[var(--text-primary)] sm:text-sm"
+          >
+            {t.resultFrames}: 45
+          </span>
+          <span
+            id="result-size-badge"
+            aria-live="polite"
+            class="rounded-xl border-2 border-[#A82020] bg-[#A82020] px-3 py-1 font-mono text-xs font-extrabold text-[#FFFFFF] sm:text-sm"
+          >
+            {t.resultSize}: 1.24 MB
+          </span>
+        </div>
+      </div>
+
+      <!-- Live Animated Output Preview Box -->
+      <div
+        class="flex flex-col items-center justify-center rounded-3xl border-2 border-[#31AAA9] bg-[#FFFDF7] p-4 dark:bg-[#1E0B0B] sm:p-6"
+      >
+        <img
+          id="result-gif-img"
+          alt="Generated Animated GIF Preview"
+          class="max-h-[420px] w-auto rounded-2xl border-2 border-[#6C1A1A] object-contain shadow-lg"
+        />
+        <video
+          id="result-mp4-video"
+          class="hidden max-h-[420px] w-auto rounded-2xl border-2 border-[#6C1A1A] object-contain shadow-lg"
+          controls
+          autoplay
+          loop
+          muted
+          playsinline
+        ></video>
+      </div>
+
+      <!-- Primary Download & Copy Action Buttons -->
+      <div class="flex flex-wrap items-center justify-center gap-4">
+        <a
+          id="download-output-link"
+          href="#"
+          download="snapgif-animated.gif"
+          class="inline-flex items-center gap-3 rounded-2xl border-2 border-[#6C1A1A] bg-[#A82020] px-8 py-4 text-xl font-extrabold text-[#FFFFFF] shadow-retro-btn transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#6C1A1A] focus:outline-none focus:ring-4 focus:ring-[#31AAA9]"
+        >
+          <svg
+            class="h-7 w-7 shrink-0 text-[#F8E0A4]"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.4"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
+          <span id="download-output-text">{t.btnDownloadGif}</span>
+        </a>
+
+        <button
+          type="button"
+          id="copy-gif-clipboard-btn"
+          class="inline-flex items-center gap-2.5 rounded-2xl border-2 border-[#31AAA9] bg-[#F8E0A4] px-6 py-4 text-base font-extrabold text-[#6C1A1A] shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#31AAA9] hover:text-[#FFFFFF] focus:outline-none focus:ring-4 focus:ring-[#31AAA9] sm:text-lg"
+        >
+          <svg
+            class="h-6 w-6 shrink-0"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+          </svg>
+          <span id="copy-gif-btn-text">{t.btnCopyClipboard}</span>
+        </button>
+
+        <button
+          type="button"
+          id="convert-another-btn"
+          class="inline-flex items-center gap-2 rounded-2xl border-2 border-[#31AAA9] bg-[var(--workspace-box-bg)] px-5 py-4 text-base font-extrabold text-[var(--text-primary)] transition-all hover:border-[#A82020] hover:bg-[#F8E0A4] dark:hover:text-[#1E0B0B]"
+        >
+          ⚙️ {t.btnConvertAnother}
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import {
+    convertMediaClientSide,
+    type ConverterMode,
+    type QualityPreset,
+    type LoopMode,
+    type ConversionResult
+  } from '../scripts/gifEngine';
+
+  function initSnapGifWorkspace() {
+    const box = document.getElementById('converter-workspace-box');
+    if (!box) return;
+
+    const i18n = {
+      pass1: box.dataset.i18nPass1 || 'Generating 256-Color HD Palette...',
+      pass2: box.dataset.i18nPass2 || 'Rendering Animated GIF...',
+      mp4: box.dataset.i18nMp4 || 'Encoding Fast Social MP4...',
+      copied: box.dataset.i18nCopied || 'Copied to Clipboard!',
+      copy: box.dataset.i18nCopy || 'Copy GIF to Clipboard',
+      dlGif: box.dataset.i18nDlGif || 'Download Animated GIF',
+      dlMp4: box.dataset.i18nDlMp4 || 'Download MP4 Video',
+      convertGif: box.dataset.i18nConvertGif || 'Create Animated GIF Now',
+      convertMp4: box.dataset.i18nConvertMp4 || 'Convert to Fast MP4 Video'
+    };
+
+    // Steps
+    const step1 = document.getElementById('step-1-dropzone')!;
+    const step2 = document.getElementById('step-2-controls')!;
+    const step3 = document.getElementById('step-3-progress')!;
+    const step4 = document.getElementById('step-4-result')!;
+
+    // Inputs & Buttons
+    const fileInput = document.getElementById('video-file-input') as HTMLInputElement;
+    const selectVideoBtn = document.getElementById('select-video-btn')!;
+    const changeFileBtn = document.getElementById('change-file-btn')!;
+    const startConvertBtn = document.getElementById('start-convert-btn')!;
+    const startConvertBtnText = document.getElementById('start-convert-btn-text')!;
+    const convertAnotherBtn = document.getElementById('convert-another-btn')!;
+
+    // Collapsible Mode Presets Elements
+    const modeCollapseToggle = document.getElementById('mode-collapse-toggle');
+    const modePillsDrawer = document.getElementById('mode-pills-drawer');
+    const modeCollapseArrow = document.getElementById('mode-collapse-arrow');
+    const activeModeLabel = document.getElementById('active-mode-label');
+
+    // Collapsible Advanced Settings & Trim Elements
+    const advancedSettingsToggle = document.getElementById('advanced-settings-toggle');
+    const advancedSettingsDrawer = document.getElementById('advanced-settings-drawer');
+    const advancedSettingsArrow = document.getElementById('advanced-settings-arrow');
+    const settingsSummaryPill = document.getElementById('settings-summary-pill');
+
+    // Video & Trim Elements
+    const videoPlayer = document.getElementById('preview-video-player') as HTMLVideoElement;
+    const loadedFileMeta = document.getElementById('loaded-file-meta')!;
+    const trimStartSlider = document.getElementById('trim-start-slider') as HTMLInputElement;
+    const trimEndSlider = document.getElementById('trim-end-slider') as HTMLInputElement;
+    const trimStartVal = document.getElementById('trim-start-val')!;
+    const trimEndVal = document.getElementById('trim-end-val')!;
+    const trimDurationBadge = document.getElementById('trim-duration-badge')!;
+
+    // Batch Queue Elements
+    const batchContainer = document.getElementById('batch-queue-container')!;
+    const batchList = document.getElementById('batch-queue-list')!;
+
+    // Progress Elements
+    const progressStatusText = document.getElementById('progress-status-text')!;
+    const progressBarFill = document.getElementById('progress-bar-fill')!;
+    const progressPercentageText = document.getElementById('progress-percentage-text')!;
+
+    // Result Elements
+    const resultGifImg = document.getElementById('result-gif-img') as HTMLImageElement;
+    const resultMp4Video = document.getElementById('result-mp4-video') as HTMLVideoElement;
+    const resultDimensionsBadge = document.getElementById('result-dimensions-badge')!;
+    const resultFramesBadge = document.getElementById('result-frames-badge')!;
+    const resultSizeBadge = document.getElementById('result-size-badge')!;
+    const downloadOutputLink = document.getElementById('download-output-link') as HTMLAnchorElement;
+    const downloadOutputText = document.getElementById('download-output-text')!;
+    const copyGifClipboardBtn = document.getElementById('copy-gif-clipboard-btn')!;
+    const copyGifBtnText = document.getElementById('copy-gif-btn-text')!;
+
+    // State
+    let currentMode: ConverterMode = 'video-to-gif';
+    let currentPreset: QualityPreset = 'hd';
+    let currentFps = 15;
+    let currentWidth = 480;
+    let currentSpeed = 1;
+    let currentLoop: LoopMode = 'infinite';
+    let fileQueue: File[] = [];
+    let activeFileIndex = 0;
+    let activeVideoUrl: string | null = null;
+    let lastResult: ConversionResult | null = null;
+
+    function showStep(stepNumber: 1 | 2 | 3 | 4) {
+      step1.classList.toggle('hidden', stepNumber !== 1);
+      step2.classList.toggle('hidden', stepNumber !== 2);
+      step3.classList.toggle('hidden', stepNumber !== 3);
+      step3.classList.toggle('flex', stepNumber === 3);
+      step4.classList.toggle('hidden', stepNumber !== 4);
+    }
+
+    function formatBytes(bytes: number): string {
+      if (bytes < 1024) return `${bytes} B`;
+      const kb = bytes / 1024;
+      if (kb < 1024) return `${kb.toFixed(1)} KB`;
+      const mb = kb / 1024;
+      return `${mb.toFixed(2)} MB`;
+    }
+
+    // Collapsible Mode Presets Toggle
+    function setModeDrawerOpen(open: boolean) {
+      if (!modeCollapseToggle || !modePillsDrawer || !modeCollapseArrow) return;
+      modeCollapseToggle.setAttribute('aria-expanded', String(open));
+      modePillsDrawer.classList.toggle('hidden', !open);
+      modePillsDrawer.classList.toggle('flex', open);
+      modeCollapseArrow.classList.toggle('rotate-180', open);
+    }
+
+    if (modeCollapseToggle && modePillsDrawer) {
+      modeCollapseToggle.addEventListener('click', () => {
+        const isOpen = modeCollapseToggle.getAttribute('aria-expanded') === 'true';
+        setModeDrawerOpen(!isOpen);
+      });
+    }
+
+    // Collapsible Advanced Settings & Trim Toggle
+    function setAdvancedSettingsOpen(open: boolean) {
+      if (!advancedSettingsToggle || !advancedSettingsDrawer || !advancedSettingsArrow) return;
+      advancedSettingsToggle.setAttribute('aria-expanded', String(open));
+      advancedSettingsDrawer.classList.toggle('hidden', !open);
+      advancedSettingsArrow.classList.toggle('rotate-180', open);
+    }
+
+    function updateSettingsSummaryPill() {
+      if (!settingsSummaryPill) return;
+      const wLabel = currentWidth === 0 ? 'Orig' : `${currentWidth}px`;
+      settingsSummaryPill.textContent = `${currentFps} FPS • ${wLabel}`;
+    }
+
+    if (advancedSettingsToggle && advancedSettingsDrawer) {
+      advancedSettingsToggle.addEventListener('click', () => {
+        const isOpen = advancedSettingsToggle.getAttribute('aria-expanded') === 'true';
+        setAdvancedSettingsOpen(!isOpen);
+      });
+    }
+
+    // Mode Selector Pills
+    const modePills = box.querySelectorAll<HTMLButtonElement>('.mode-pill');
+    modePills.forEach((pill) => {
+      pill.addEventListener('click', () => {
+        const mode = (pill.dataset.mode as ConverterMode) || 'video-to-gif';
+        currentMode = mode;
+
+        if (activeModeLabel && pill.textContent) {
+          activeModeLabel.textContent = pill.textContent.trim();
+        }
+
+        modePills.forEach((p) => {
+          const isSelected = p === pill;
+          p.setAttribute('aria-selected', String(isSelected));
+          if (isSelected) {
+            p.className =
+              'mode-pill active rounded-2xl border-2 border-[#A82020] bg-[#A82020] px-4 py-2 text-sm font-extrabold text-[#FFFFFF] shadow-sm transition-all sm:text-base';
+          } else {
+            p.className =
+              'mode-pill rounded-2xl border-2 border-[#31AAA9] bg-[var(--highlight-pill-badge)]/60 px-4 py-2 text-sm font-bold text-[var(--text-primary)] transition-all hover:border-[#A82020] hover:bg-[#F8E0A4] dark:hover:text-[#1E0B0B] sm:text-base';
+          }
+        });
+
+        // Auto-apply sensible presets for Discord Sticker or Compress modes
+        if (mode === 'discord-sticker') {
+          selectPreset('discord');
+          selectWidth(320);
+          selectFps(15);
+        } else if (mode === 'compress-gif') {
+          selectPreset('balanced');
+          selectWidth(480);
+          selectFps(15);
+        }
+
+        startConvertBtnText.textContent =
+          mode === 'gif-to-mp4' ? i18n.convertMp4 : i18n.convertGif;
+
+        // Collapse drawer after choosing a mode to keep UI ultra-clean
+        setModeDrawerOpen(false);
+      });
+    });
+
+    // Preset Cards
+    const presetCards = box.querySelectorAll<HTMLButtonElement>('.preset-card');
+    function selectPreset(preset: QualityPreset) {
+      currentPreset = preset;
+      presetCards.forEach((card) => {
+        const isMatch = card.dataset.preset === preset;
+        if (isMatch) {
+          card.className =
+            'preset-card active flex flex-col justify-between rounded-2xl border-2 border-[#A82020] bg-[#F8E0A4] p-3 text-left text-[#6C1A1A] shadow-sm transition-all';
+        } else {
+          card.className =
+            'preset-card flex flex-col justify-between rounded-2xl border-2 border-[#31AAA9] bg-[var(--bg-primary)] p-3 text-left text-[var(--text-primary)] transition-all hover:border-[#A82020]';
+        }
+      });
+    }
+    presetCards.forEach((card) => {
+      card.addEventListener('click', () => {
+        const p = (card.dataset.preset as QualityPreset) || 'hd';
+        selectPreset(p);
+        if (p === 'discord') {
+          selectWidth(320);
+          selectFps(15);
+        }
+      });
+    });
+
+    // FPS Pills
+    const fpsPills = box.querySelectorAll<HTMLButtonElement>('.fps-pill');
+    function selectFps(fps: number) {
+      currentFps = fps;
+      fpsPills.forEach((pill) => {
+        const isMatch = Number(pill.dataset.fps) === fps;
+        pill.className = isMatch
+          ? 'fps-pill rounded-xl border-2 border-[#A82020] bg-[#A82020] px-3 py-1.5 text-sm font-extrabold text-[#FFFFFF] transition-all'
+          : 'fps-pill rounded-xl border-2 border-[#31AAA9] bg-[var(--workspace-box-bg)] px-3 py-1.5 text-sm font-extrabold text-[var(--text-primary)] transition-all hover:border-[#A82020]';
+      });
+      updateSettingsSummaryPill();
+    }
+    fpsPills.forEach((pill) => {
+      pill.addEventListener('click', () => selectFps(Number(pill.dataset.fps)));
+    });
+
+    // Width Pills
+    const widthPills = box.querySelectorAll<HTMLButtonElement>('.width-pill');
+    function selectWidth(w: number) {
+      currentWidth = w;
+      widthPills.forEach((pill) => {
+        const isMatch = Number(pill.dataset.width) === w;
+        pill.className = isMatch
+          ? 'width-pill rounded-xl border-2 border-[#A82020] bg-[#A82020] px-3 py-1.5 text-sm font-extrabold text-[#FFFFFF] transition-all'
+          : 'width-pill rounded-xl border-2 border-[#31AAA9] bg-[var(--workspace-box-bg)] px-3 py-1.5 text-sm font-extrabold text-[var(--text-primary)] transition-all hover:border-[#A82020]';
+      });
+      updateSettingsSummaryPill();
+    }
+    widthPills.forEach((pill) => {
+      pill.addEventListener('click', () => selectWidth(Number(pill.dataset.width)));
+    });
+
+    // Speed Pills
+    const speedPills = box.querySelectorAll<HTMLButtonElement>('.speed-pill');
+    speedPills.forEach((pill) => {
+      pill.addEventListener('click', () => {
+        currentSpeed = Number(pill.dataset.speed) || 1;
+        speedPills.forEach((p) => {
+          const isMatch = p === pill;
+          p.className = isMatch
+            ? 'speed-pill rounded-xl border-2 border-[#A82020] bg-[#A82020] px-3 py-1.5 text-sm font-extrabold text-[#FFFFFF] transition-all'
+            : 'speed-pill rounded-xl border-2 border-[#31AAA9] bg-[var(--bg-primary)] px-3 py-1.5 text-sm font-extrabold text-[var(--text-primary)] transition-all hover:border-[#A82020]';
+        });
+      });
+    });
+
+    // Loop Pills
+    const loopPills = box.querySelectorAll<HTMLButtonElement>('.loop-pill');
+    loopPills.forEach((pill) => {
+      pill.addEventListener('click', () => {
+        currentLoop = (pill.dataset.loop as LoopMode) || 'infinite';
+        loopPills.forEach((p) => {
+          const isMatch = p === pill;
+          p.className = isMatch
+            ? 'loop-pill rounded-xl border-2 border-[#A82020] bg-[#A82020] px-3 py-1.5 text-xs font-extrabold text-[#FFFFFF] transition-all sm:text-sm'
+            : 'loop-pill rounded-xl border-2 border-[#31AAA9] bg-[var(--bg-primary)] px-3 py-1.5 text-xs font-extrabold text-[var(--text-primary)] transition-all hover:border-[#A82020] sm:text-sm';
+        });
+      });
+    });
+
+    // Trim Sliders Synchronization
+    function syncTrimLabels() {
+      let start = parseFloat(trimStartSlider.value) || 0;
+      let end = parseFloat(trimEndSlider.value) || 3;
+      if (end <= start + 0.2) {
+        end = Math.min(parseFloat(trimEndSlider.max) || 15, start + 0.5);
+        trimEndSlider.value = end.toFixed(1);
+      }
+      trimStartVal.textContent = `${start.toFixed(1)}s`;
+      trimEndVal.textContent = `${end.toFixed(1)}s`;
+      const dur = Math.max(0.2, end - start);
+      const labelPrefix = trimDurationBadge.textContent?.split(':')[0] || 'Duration';
+      trimDurationBadge.textContent = `${labelPrefix}: ${dur.toFixed(1)}s`;
+    }
+
+    trimStartSlider.addEventListener('input', () => {
+      syncTrimLabels();
+      if (videoPlayer.readyState >= 1) {
+        videoPlayer.currentTime = parseFloat(trimStartSlider.value) || 0;
+      }
+    });
+
+    trimEndSlider.addEventListener('input', () => {
+      syncTrimLabels();
+    });
+
+    // Keep live video preview looping inside [startTime, endTime]
+    videoPlayer.addEventListener('timeupdate', () => {
+      const start = parseFloat(trimStartSlider.value) || 0;
+      const end = parseFloat(trimEndSlider.value) || 5;
+      if (videoPlayer.currentTime >= end) {
+        videoPlayer.currentTime = start;
+      }
+    });
+
+    function renderBatchQueue() {
+      if (fileQueue.length <= 1) {
+        batchContainer.classList.add('hidden');
+        return;
+      }
+      batchContainer.classList.remove('hidden');
+      batchList.innerHTML = '';
+      fileQueue.forEach((f, idx) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className =
+          idx === activeFileIndex
+            ? 'rounded-xl border-2 border-[#A82020] bg-[#A82020] px-3 py-1 text-xs font-extrabold text-white'
+            : 'rounded-xl border-2 border-[#31AAA9] bg-[var(--workspace-box-bg)] px-3 py-1 text-xs font-bold text-[var(--text-primary)]';
+        btn.textContent = `${idx + 1}. ${f.name}`;
+        btn.addEventListener('click', () => {
+          activeFileIndex = idx;
+          loadActiveFileIntoPreview();
+          renderBatchQueue();
+        });
+        batchList.appendChild(btn);
+      });
+    }
+
+    function loadActiveFileIntoPreview() {
+      const file = fileQueue[activeFileIndex];
+      if (!file) return;
+
+      if (activeVideoUrl) {
+        URL.revokeObjectURL(activeVideoUrl);
+      }
+      activeVideoUrl = URL.createObjectURL(file);
+      videoPlayer.src = activeVideoUrl;
+
+      loadedFileMeta.textContent = `${file.name} • ${formatBytes(file.size)}`;
+
+      videoPlayer.onloadedmetadata = () => {
+        const rawDur =
+          videoPlayer.duration && Number.isFinite(videoPlayer.duration)
+            ? videoPlayer.duration
+            : 6.0;
+        const maxDur = Math.max(1.0, Math.min(60, rawDur));
+        const defaultEnd = Math.min(maxDur, 5.0);
+
+        trimStartSlider.max = Math.max(0, maxDur - 0.2).toFixed(1);
+        trimEndSlider.max = maxDur.toFixed(1);
+        trimStartSlider.value = '0';
+        trimEndSlider.value = defaultEnd.toFixed(1);
+        syncTrimLabels();
+
+        loadedFileMeta.textContent = `${file.name} • ${videoPlayer.videoWidth || 640}×${
+          videoPlayer.videoHeight || 360
+        } • ${rawDur.toFixed(1)}s (${formatBytes(file.size)})`;
+
+        videoPlayer.play().catch(() => {});
+      };
+
+      showStep(2);
+    }
+
+    function handleFilesSelected(files: FileList | File[]) {
+      const arr = Array.from(files);
+      if (arr.length === 0) return;
+      fileQueue = arr;
+      activeFileIndex = 0;
+      renderBatchQueue();
+      loadActiveFileIntoPreview();
+    }
+
+    // Dropzone Events
+    selectVideoBtn.addEventListener('click', () => fileInput.click());
+    changeFileBtn.addEventListener('click', () => fileInput.click());
+
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files && fileInput.files.length > 0) {
+        handleFilesSelected(fileInput.files);
+      }
+    });
+
+    step1.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      step1.classList.add('drag-over');
+    });
+
+    step1.addEventListener('dragleave', () => {
+      step1.classList.remove('drag-over');
+    });
+
+    step1.addEventListener('drop', (e) => {
+      e.preventDefault();
+      step1.classList.remove('drag-over');
+      if (e.dataTransfer?.files && e.dataTransfer.files.length > 0) {
+        handleFilesSelected(e.dataTransfer.files);
+      }
+    });
+
+    // Execute Client-Side Conversion
+    startConvertBtn.addEventListener('click', async () => {
+      const file = fileQueue[activeFileIndex];
+      if (!file) return;
+
+      videoPlayer.pause();
+      showStep(3);
+      progressBarFill.style.width = '8%';
+      progressPercentageText.textContent = '8%';
+      progressStatusText.textContent =
+        currentMode === 'gif-to-mp4' ? i18n.mp4 : i18n.pass1;
+
+      try {
+        const startTime = parseFloat(trimStartSlider.value) || 0;
+        const endTime = parseFloat(trimEndSlider.value) || 3;
+
+        const result = await convertMediaClientSide(file, {
+          mode: currentMode,
+          startTime,
+          endTime,
+          preset: currentPreset,
+          fps: currentFps,
+          width: currentWidth,
+          speed: currentSpeed,
+          loop: currentLoop,
+          onProgress: (percent, phase) => {
+            const safePct = Math.min(100, Math.max(5, percent));
+            progressBarFill.style.width = `${safePct}%`;
+            progressPercentageText.textContent = `${safePct}%`;
+            if (phase === 'mp4') {
+              progressStatusText.textContent = i18n.mp4;
+            } else if (phase === 'pass1') {
+              progressStatusText.textContent = i18n.pass1;
+            } else {
+              progressStatusText.textContent = i18n.pass2;
+            }
+          }
+        });
+
+        if (lastResult?.url) {
+          URL.revokeObjectURL(lastResult.url);
+        }
+        lastResult = result;
+
+        // Populate Step 4 Preview & Badges
+        const dimPrefix = resultDimensionsBadge.textContent?.split(':')[0] || 'Dimensions';
+        const framePrefix = resultFramesBadge.textContent?.split(':')[0] || 'Frames';
+        const sizePrefix = resultSizeBadge.textContent?.split(':')[0] || 'File Size';
+
+        resultDimensionsBadge.textContent = `${dimPrefix}: ${result.width}×${result.height}px`;
+        resultFramesBadge.textContent = `${framePrefix}: ${result.frames}`;
+        resultSizeBadge.textContent = `${sizePrefix}: ${formatBytes(result.sizeBytes)}`;
+
+        const baseName = file.name.replace(/\.[^/.]+$/, '') || 'snapgif';
+        downloadOutputLink.href = result.url;
+        downloadOutputLink.download = `${baseName}-snapgif.${result.extension}`;
+
+        if (result.isMp4) {
+          resultGifImg.classList.add('hidden');
+          resultMp4Video.classList.remove('hidden');
+          resultMp4Video.src = result.url;
+          downloadOutputText.textContent = i18n.dlMp4;
+        } else {
+          resultMp4Video.classList.add('hidden');
+          resultGifImg.classList.remove('hidden');
+          resultGifImg.src = result.url;
+          downloadOutputText.textContent = i18n.dlGif;
+        }
+
+        showStep(4);
+      } catch (err) {
+        console.error('Conversion failed:', err);
+        showStep(2);
+      }
+    });
+
+    // Copy GIF to Clipboard
+    copyGifClipboardBtn.addEventListener('click', async () => {
+      if (!lastResult) return;
+      try {
+        if (navigator.clipboard && 'write' in navigator.clipboard) {
+          const item = new ClipboardItem({ [lastResult.blob.type]: lastResult.blob });
+          await navigator.clipboard.write([item]);
+        } else {
+          await navigator.clipboard.writeText(window.location.href);
+        }
+      } catch {
+        // Fallback if browser restricts image/gif in ClipboardItem
+        try {
+          await navigator.clipboard.writeText(lastResult.url);
+        } catch {}
+      }
+      copyGifBtnText.textContent = i18n.copied;
+      setTimeout(() => {
+        copyGifBtnText.textContent = i18n.copy;
+      }, 2500);
+    });
+
+    // Return to Step 2 Controls to tweak settings or load another video
+    convertAnotherBtn.addEventListener('click', () => {
+      showStep(2);
+    });
+  }
+
+  initSnapGifWorkspace();
+</script>
